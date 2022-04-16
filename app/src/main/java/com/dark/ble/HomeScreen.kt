@@ -16,7 +16,6 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -52,6 +51,9 @@ internal fun HomeScreen(navController: NavHostController) {
     val handler = Handler(Looper.getMainLooper())
     val leDeviceList = remember { mutableStateListOf<BluetoothDevice>() }
 
+    /**
+     * launcher val not used as of now, but can be used later to ask user for perms again if denied
+     */
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
         if (isGranted) {
             Log.d(TAG,"PERMISSION GRANTED")
@@ -64,20 +66,38 @@ internal fun HomeScreen(navController: NavHostController) {
         launcher.launch(android.Manifest.permission.BLUETOOTH)
     }
 
+    /**
+     * Scan callback for bluetoothLeScanner
+     */
     val leScanCallback: ScanCallback = object : ScanCallback() {
         override fun onScanResult(callbackType: Int, result: ScanResult) {
             super.onScanResult(callbackType, result)
-            leDeviceList.add(result.device)
+            if (result.device !in leDeviceList) {
+                leDeviceList.add(result.device)
+            }
+            Log.d(TAG, "$result")
             Log.d(TAG, "${result.device}")
         }
     }
 
+    /**
+     * As per android docs :
+     * If you declare any dangerous permissions, and if your app is installed on a device that runs
+     * Android 6.0 (API level 23) or higher, you must request the dangerous permissions at runtime
+     * by following the steps in this guide.
+     *
+     * We have to ask for perms like this before we can use anything that needs those perms
+     * during runtime. The specific permissions are declared @ BLEConstant.PERMISSIONS
+     */
     for (perms in BLEConstant.PERMISSIONS) {
         if (ContextCompat.checkSelfPermission(context, perms) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(context.getActivity() as Activity, arrayOf(perms), BLEConstant.PERMISSION_CODE)
         }
     }
 
+    /**
+     * Simple scaffold to display button and data
+     */
     Scaffold(
         backgroundColor = MaterialTheme.colors.background
     ) {
@@ -107,8 +127,12 @@ internal fun HomeScreen(navController: NavHostController) {
                         },
                         modifier = Modifier.padding(all = 16.dp)
                     ) {
-                        Text(text = device.name)
-                        Text(text = device.address)
+                        Column {
+                            if (device.name != null)
+                                Text(text = "Name: ${device.name}")
+                            if (device.address != null)
+                                Text(text = "Address: ${device.address}")
+                        }
                     }
                 }
             }
@@ -116,12 +140,28 @@ internal fun HomeScreen(navController: NavHostController) {
     }
 }
 
+
+/**
+ * We use this extension function since the context may not be the ComponentActivity, but a
+ * ContextWrapper, which will cause the functions that use it to fail. Hence if it is a
+ * ContextWrapper we call getActivity() recursively until we get the Activity
+ */
 fun Context.getActivity(): ComponentActivity? = when (this) {
     is ComponentActivity -> this
     is ContextWrapper -> baseContext.getActivity()
     else -> null
 }
 
+
+/**
+ * Simply scans for BLE devices nearby.
+ *
+ * @param context: The context for perms
+ * @param scanning: Check if device is scanning already
+ * @param leScanCallback: Callback object to give results
+ * @param handler: Lets us stop scanning after period of time
+ * @param bluetoothLeScanner: Scanner object
+ */
 fun scanLeDevice(
     context: Context,
     scanning: Boolean,
