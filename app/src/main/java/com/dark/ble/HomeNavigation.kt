@@ -5,6 +5,8 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -30,15 +32,20 @@ fun HomeNavigation() {
             },
         ) { HomeScreen(navController = navController) }
 
-        // About
+        // Device Screen
         composable(
-            route = Screen.DeviceScreen.route,
+            route = Screen.DeviceScreen.route + "/{deviceAddress}",
+            arguments = listOf(navArgument("deviceAddress") { type = NavType.StringType }),
             popEnterTransition = {
                 slideIntoContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
             },
             exitTransition = {
                 slideOutOfContainer(AnimatedContentScope.SlideDirection.Down, animationSpec = tween(animationDuration))
             },
-        ) { DeviceScreen(navController = navController) }
+        ) { backStackEntry ->
+            backStackEntry.arguments?.getString("deviceAddress")?.let {
+                DeviceScreen(navController = navController, deviceAddress = it)
+            }
+        }
     }
 }

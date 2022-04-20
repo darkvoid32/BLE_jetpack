@@ -1,8 +1,6 @@
 package com.dark.ble
 
 import android.app.Activity
-import android.bluetooth.BluetoothDevice
-import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothManager
 import android.bluetooth.le.BluetoothLeScanner
 import android.bluetooth.le.ScanCallback
@@ -26,8 +24,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -37,6 +33,7 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import com.dark.ble.data.BLEConstant
 import com.dark.ble.data.BLEConstant.TAG
+import com.dark.ble.data.BLERepository
 
 @Composable
 internal fun HomeScreen(navController: NavHostController) {
@@ -45,11 +42,8 @@ internal fun HomeScreen(navController: NavHostController) {
     val bluetoothManager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
     val bluetoothAdapter = bluetoothManager.adapter
     val bluetoothLeScanner = bluetoothAdapter.bluetoothLeScanner
-    val bluetoothGatt: BluetoothGatt
-
     var scanning = false
     val handler = Handler(Looper.getMainLooper())
-    val leDeviceList = remember { mutableStateListOf<BluetoothDevice>() }
 
     /**
      * launcher val not used as of now, but can be used later to ask user for perms again if denied
@@ -72,9 +66,7 @@ internal fun HomeScreen(navController: NavHostController) {
     val leScanCallback: ScanCallback = object : ScanCallback() {
         override fun onScanResult(callbackType: Int, result: ScanResult) {
             super.onScanResult(callbackType, result)
-            if (result.device !in leDeviceList) {
-                leDeviceList.add(result.device)
-            }
+            BLERepository.addDevice(result.device, context)
             Log.d(TAG, "$result")
             Log.d(TAG, "${result.device}")
         }
@@ -109,6 +101,7 @@ internal fun HomeScreen(navController: NavHostController) {
         ) {
             Button(
                 onClick = {
+                    BLERepository.clearDeviceList()
                     scanning =
                         scanLeDevice(context, scanning, leScanCallback, handler, bluetoothLeScanner)
                 }
@@ -120,10 +113,14 @@ internal fun HomeScreen(navController: NavHostController) {
                 modifier = Modifier.padding(all = 16.dp)
             )
             LazyColumn {
-                items(leDeviceList) { device ->
+                items(BLERepository.getDeviceList()) { device ->
                     Button(
                         onClick = {
-                            //bluetoothGatt = device.connectGatt(context, false, gattCallback)
+                            bluetoothLeScanner.stopScan(leScanCallback)
+                            navController.navigate(Screen.DeviceScreen.route + "/${device.address}")
+                            //TODO("Connect to device using Le Service" +
+                            //        "https://github.com/objectsyndicate/Kotlin-BluetoothLeGatt/blob/master/Application/src/main/java/com/example/android/bluetoothlegatt/DeviceControlActivity.kt" +
+                            //        "https://github.com/objectsyndicate/Kotlin-BluetoothLeGatt/blob/master/Application/src/main/java/com/example/android/bluetoothlegatt/DeviceScanActivity.kt")
                         },
                         modifier = Modifier.padding(all = 16.dp)
                     ) {
@@ -178,7 +175,8 @@ fun scanLeDevice(
         Log.d(TAG, "Scanning")
         handler.postDelayed({
             Log.d(TAG, "Stop Scanning")
-            bluetoothLeScanner.stopScan(leScanCallback)
+            if (!scanning)
+                bluetoothLeScanner.stopScan(leScanCallback)
         }, BLEConstant.SCAN_PERIOD)
         bluetoothLeScanner.startScan(leScanCallback)
         true

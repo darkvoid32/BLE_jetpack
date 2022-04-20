@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from D:\Coding\Work\BLE\app\src\main\AndroidManifest.xml:2:1-31:12
-INJECTED from D:\Coding\Work\BLE\app\src\main\AndroidManifest.xml:2:1-31:12
-INJECTED from D:\Coding\Work\BLE\app\src\main\AndroidManifest.xml:2:1-31:12
-INJECTED from D:\Coding\Work\BLE\app\src\main\AndroidManifest.xml:2:1-31:12
+ADDED from D:\Coding\Work\BLE\app\src\main\AndroidManifest.xml:2:1-32:12
+INJECTED from D:\Coding\Work\BLE\app\src\main\AndroidManifest.xml:2:1-32:12
+INJECTED from D:\Coding\Work\BLE\app\src\main\AndroidManifest.xml:2:1-32:12
+INJECTED from D:\Coding\Work\BLE\app\src\main\AndroidManifest.xml:2:1-32:12
 MERGED from [com.google.accompanist:accompanist-navigation-animation:0.23.1] C:\Users\tangy\.gradle\caches\transforms-3\039fd6fb592c6236ed231aa1da8903fc\transformed\jetified-accompanist-navigation-animation-0.23.1\AndroidManifest.xml:17:1-24:12
 MERGED from [com.google.accompanist:accompanist-systemuicontroller:0.23.1] C:\Users\tangy\.gradle\caches\transforms-3\60e3e08edd45a1ff29256c80276eabae\transformed\jetified-accompanist-systemuicontroller-0.23.1\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.compose.ui:ui-tooling:1.1.1] C:\Users\tangy\.gradle\caches\transforms-3\3484078ef0fb17ce536becb5a1049ef0\transformed\jetified-ui-tooling-1.1.1\AndroidManifest.xml:17:1-30:12
@@ -77,20 +77,20 @@ MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\User
 MERGED from [androidx.print:print:1.0.0] C:\Users\tangy\.gradle\caches\transforms-3\e1a84ecef3282d4886940c0c894a07dc\transformed\print-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.arch.core:core-runtime:2.1.0] C:\Users\tangy\.gradle\caches\transforms-3\a298cc8dfbb10f841178524d7147a090\transformed\core-runtime-2.1.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.annotation:annotation-experimental:1.1.0] C:\Users\tangy\.gradle\caches\transforms-3\dd49de45464b49c8356dfcb02735d92d\transformed\jetified-annotation-experimental-1.1.0\AndroidManifest.xml:17:1-24:12
-INJECTED from D:\Coding\Work\BLE\app\src\main\AndroidManifest.xml:2:1-31:12
-INJECTED from D:\Coding\Work\BLE\app\src\main\AndroidManifest.xml:2:1-31:12
-INJECTED from D:\Coding\Work\BLE\app\src\main\AndroidManifest.xml:2:1-31:12
+INJECTED from D:\Coding\Work\BLE\app\src\main\AndroidManifest.xml:2:1-32:12
+INJECTED from D:\Coding\Work\BLE\app\src\main\AndroidManifest.xml:2:1-32:12
+INJECTED from D:\Coding\Work\BLE\app\src\main\AndroidManifest.xml:2:1-32:12
 	package
 		ADDED from D:\Coding\Work\BLE\app\src\main\AndroidManifest.xml:3:5-27
 		INJECTED from D:\Coding\Work\BLE\app\src\main\AndroidManifest.xml
 		INJECTED from D:\Coding\Work\BLE\app\src\main\AndroidManifest.xml
 	android:versionName
 		INJECTED from D:\Coding\Work\BLE\app\src\main\AndroidManifest.xml
-		ADDED from D:\Coding\Work\BLE\app\src\main\AndroidManifest.xml:2:1-31:12
+		ADDED from D:\Coding\Work\BLE\app\src\main\AndroidManifest.xml:2:1-32:12
 		INJECTED from D:\Coding\Work\BLE\app\src\main\AndroidManifest.xml
 	android:versionCode
 		INJECTED from D:\Coding\Work\BLE\app\src\main\AndroidManifest.xml
-		ADDED from D:\Coding\Work\BLE\app\src\main\AndroidManifest.xml:2:1-31:12
+		ADDED from D:\Coding\Work\BLE\app\src\main\AndroidManifest.xml:2:1-32:12
 		INJECTED from D:\Coding\Work\BLE\app\src\main\AndroidManifest.xml
 	xmlns:android
 		ADDED from D:\Coding\Work\BLE\app\src\main\AndroidManifest.xml:2:11-69
@@ -119,7 +119,7 @@ ADDED from D:\Coding\Work\BLE\app\src\main\AndroidManifest.xml:10:5-73
 	android:name
 		ADDED from D:\Coding\Work\BLE\app\src\main\AndroidManifest.xml:10:22-70
 application
-ADDED from D:\Coding\Work\BLE\app\src\main\AndroidManifest.xml:12:5-29:19
+ADDED from D:\Coding\Work\BLE\app\src\main\AndroidManifest.xml:12:5-30:19
 MERGED from [androidx.compose.ui:ui-tooling:1.1.1] C:\Users\tangy\.gradle\caches\transforms-3\3484078ef0fb17ce536becb5a1049ef0\transformed\jetified-ui-tooling-1.1.1\AndroidManifest.xml:24:5-28:19
 MERGED from [androidx.compose.ui:ui-tooling:1.1.1] C:\Users\tangy\.gradle\caches\transforms-3\3484078ef0fb17ce536becb5a1049ef0\transformed\jetified-ui-tooling-1.1.1\AndroidManifest.xml:24:5-28:19
 MERGED from [com.google.android.material:material:1.5.0] C:\Users\tangy\.gradle\caches\transforms-3\63db690ba1c018d8f12fad16879d37e0\transformed\material-1.5.0\AndroidManifest.xml:22:5-20
@@ -170,6 +170,10 @@ category#android.intent.category.LAUNCHER
 ADDED from D:\Coding\Work\BLE\app\src\main\AndroidManifest.xml:26:17-77
 	android:name
 		ADDED from D:\Coding\Work\BLE\app\src\main\AndroidManifest.xml:26:27-74
+service#com.dark.ble.data.BluetoothLeService
+ADDED from D:\Coding\Work\BLE\app\src\main\AndroidManifest.xml:29:9-72
+	android:name
+		ADDED from D:\Coding\Work\BLE\app\src\main\AndroidManifest.xml:29:18-69
 uses-sdk
 INJECTED from D:\Coding\Work\BLE\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from D:\Coding\Work\BLE\app\src\main\AndroidManifest.xml
