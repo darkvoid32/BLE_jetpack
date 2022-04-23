@@ -9,6 +9,8 @@ import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
@@ -28,37 +30,10 @@ import kotlinx.coroutines.launch
 import java.lang.Exception
 
 @Composable
-inline fun <reified BoundService : Service, reified BoundServiceBinder : Binder>
-        rememberBoundLocalService(crossinline getService: @DisallowComposableCalls BoundServiceBinder.() -> BoundService): BoundService? {
-    val context: Context = LocalContext.current
-    var boundService: BoundService? by remember(context) { mutableStateOf(null) }
-    val serviceConnection: ServiceConnection = remember(context) {
-        object : ServiceConnection {
-            override fun onServiceConnected(className: ComponentName, service: IBinder) {
-                boundService = (service as BoundServiceBinder).getService()
-            }
-
-            override fun onServiceDisconnected(arg0: ComponentName) {
-                boundService = null
-            }
-        }
-    }
-    DisposableEffect(context, serviceConnection) {
-        context.bindService(
-            Intent(context, BoundService::class.java),
-            serviceConnection,
-            Context.BIND_AUTO_CREATE
-        )
-        onDispose { context.unbindService(serviceConnection) }
-    }
-    return boundService
-}
-
-@Composable
 internal fun DeviceScreen(navController: NavHostController, deviceAddress: String) {
 
-    var bluetoothLeService =
-        rememberBoundLocalService<BluetoothLeService, BluetoothLeService.LocalBinder> { getService() }
+    
+    var bluetoothLeService = rememberBoundLocalService<BluetoothLeService, BluetoothLeService.LocalBinder> { getService() }
     val context = LocalContext.current
     val device = BLERepository.getDevice(deviceAddress, context)
     val gattServices = remember { mutableStateListOf<BluetoothGattService?>() }
@@ -88,6 +63,7 @@ internal fun DeviceScreen(navController: NavHostController, deviceAddress: Strin
                         }
                     } catch (e: Exception) {
                         Log.d(TAG, "Get supported gatt services : $e")
+                        connectionState.value = "Connected, cannot get services : $e"
                     }
                 }
                 BluetoothLeService.ACTION_GATT_DISCONNECTED -> {
@@ -101,8 +77,7 @@ internal fun DeviceScreen(navController: NavHostController, deviceAddress: Strin
                     }
                 }
                 BluetoothLeService.ACTION_DATA_AVAILABLE -> {
-                    gattExtraData.value =
-                        intent.getStringExtra(BluetoothLeService.EXTRA_DATA).toString()
+                    gattExtraData.value = intent.getStringExtra(BluetoothLeService.EXTRA_DATA).toString()
                 }
             }
         }
@@ -183,38 +158,58 @@ internal fun DeviceScreen(navController: NavHostController, deviceAddress: Strin
                     )
             )
 
-            for (gattService in gattServices) {
-                Text(
-                    text = "UUID : ${gattService!!.uuid}",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 15.sp,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(
-                            alignment = Alignment.CenterHorizontally
-                        )
-                )
-                Text(
-                    text = "Gatt Service : $gattService",
-                    fontSize = 14.sp,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(
-                            alignment = Alignment.CenterHorizontally
-                        )
-                )
-                for (gattCharacteristic in gattService.characteristics) {
+            LazyColumn {
+                items(gattServices) { gattService ->
                     Text(
-                        text = "Gatt Characteristic : $gattCharacteristic",
-                        fontSize = 14.sp,
+                        text = "UUID : ${gattService!!.uuid}",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 15.sp,
                         modifier = Modifier
                             .fillMaxWidth()
                             .align(
                                 alignment = Alignment.CenterHorizontally
                             )
                     )
+                    for (gattCharacteristic in gattService.characteristics) {
+                        Text(
+                            text = "Gatt Characteristic : $gattCharacteristic",
+                            fontSize = 14.sp,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .align(
+                                    alignment = Alignment.CenterHorizontally
+                                )
+                        )
+                    }
                 }
             }
         }
     }
+}
+
+@Composable
+inline fun <reified BoundService : Service, reified BoundServiceBinder : Binder>
+        rememberBoundLocalService(crossinline getService: @DisallowComposableCalls BoundServiceBinder.() -> BoundService): BoundService? {
+    val context: Context = LocalContext.current
+    var boundService: BoundService? by remember(context) { mutableStateOf(null) }
+    val serviceConnection: ServiceConnection = remember(context) {
+        object : ServiceConnection {
+            override fun onServiceConnected(className: ComponentName, service: IBinder) {
+                boundService = (service as BoundServiceBinder).getService()
+            }
+
+            override fun onServiceDisconnected(arg0: ComponentName) {
+                boundService = null
+            }
+        }
+    }
+    DisposableEffect(context, serviceConnection) {
+        context.bindService(
+            Intent(context, BoundService::class.java),
+            serviceConnection,
+            Context.BIND_AUTO_CREATE
+        )
+        onDispose { context.unbindService(serviceConnection) }
+    }
+    return boundService
 }

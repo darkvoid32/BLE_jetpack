@@ -46,18 +46,17 @@ internal fun HomeScreen(navController: NavHostController) {
     val handler = Handler(Looper.getMainLooper())
 
     /**
-     * launcher val not used as of now, but can be used later to ask user for perms again if denied
+     * Check if bluetooth access is granted or not
+     * launcher not used as of now, but can be used later to ask user for perms again if denied
      */
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
-        if (isGranted) {
-            Log.d(TAG,"PERMISSION GRANTED")
-        } else {
-            Log.d(TAG,"PERMISSION DENIED")
-        }
-    }
-
     if (!bluetoothAdapter.isEnabled) {
-        launcher.launch(android.Manifest.permission.BLUETOOTH)
+        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+            if (isGranted) {
+                Log.d(TAG, "PERMISSION GRANTED")
+            } else {
+                Log.d(TAG, "PERMISSION DENIED")
+            }
+        }.launch(android.Manifest.permission.BLUETOOTH)
     }
 
     /**
@@ -67,8 +66,7 @@ internal fun HomeScreen(navController: NavHostController) {
         override fun onScanResult(callbackType: Int, result: ScanResult) {
             super.onScanResult(callbackType, result)
             BLERepository.addDevice(result.device, context)
-            Log.d(TAG, "$result")
-            Log.d(TAG, "${result.device}")
+            Log.d(TAG, "Device scanned : ${result.device}")
         }
     }
 
@@ -102,8 +100,7 @@ internal fun HomeScreen(navController: NavHostController) {
             Button(
                 onClick = {
                     BLERepository.clearDeviceList()
-                    scanning =
-                        scanLeDevice(context, scanning, leScanCallback, handler, bluetoothLeScanner)
+                    scanning = scanLeDevice(context, scanning, leScanCallback, handler, bluetoothLeScanner)
                 }
             ) {
                 Text(text = "Scan")
@@ -118,9 +115,6 @@ internal fun HomeScreen(navController: NavHostController) {
                         onClick = {
                             bluetoothLeScanner.stopScan(leScanCallback)
                             navController.navigate(Screen.DeviceScreen.route + "/${device.address}")
-                            //TODO("Connect to device using Le Service" +
-                            //        "https://github.com/objectsyndicate/Kotlin-BluetoothLeGatt/blob/master/Application/src/main/java/com/example/android/bluetoothlegatt/DeviceControlActivity.kt" +
-                            //        "https://github.com/objectsyndicate/Kotlin-BluetoothLeGatt/blob/master/Application/src/main/java/com/example/android/bluetoothlegatt/DeviceScanActivity.kt")
                         },
                         modifier = Modifier.padding(all = 16.dp)
                     ) {
