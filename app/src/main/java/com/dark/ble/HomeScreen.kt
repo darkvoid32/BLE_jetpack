@@ -1,135 +1,130 @@
 package com.dark.ble
 
-import android.app.Activity
-import android.bluetooth.BluetoothManager
-import android.bluetooth.le.BluetoothLeScanner
-import android.bluetooth.le.ScanCallback
-import android.bluetooth.le.ScanResult
 import android.content.Context
 import android.content.ContextWrapper
-import android.content.pm.PackageManager
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.*
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SmallTopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.style.TextAlign
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import com.dark.ble.data.BLEConstant
-import com.dark.ble.data.BLEConstant.TAG
-import com.dark.ble.data.BLERepository
+import androidx.navigation.compose.currentBackStackEntryAsState
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import kotlinx.coroutines.CoroutineScope
 
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
 internal fun HomeScreen(navController: NavHostController) {
 
-    val context = LocalContext.current
-    val bluetoothManager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
-    val bluetoothAdapter = bluetoothManager.adapter
-    val bluetoothLeScanner = bluetoothAdapter.bluetoothLeScanner
-    var scanning = false
-    val handler = Handler(Looper.getMainLooper())
-
-    /**
-     * Check if bluetooth access is granted or not
-     * launcher not used as of now, but can be used later to ask user for perms again if denied
-     */
-    if (!bluetoothAdapter.isEnabled) {
-        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
-            if (isGranted) {
-                Log.d(TAG, "PERMISSION GRANTED")
-            } else {
-                Log.d(TAG, "PERMISSION DENIED")
-            }
-        }.launch(android.Manifest.permission.BLUETOOTH)
-    }
-
-    /**
-     * Scan callback for bluetoothLeScanner
-     */
-    val leScanCallback: ScanCallback = object : ScanCallback() {
-        override fun onScanResult(callbackType: Int, result: ScanResult) {
-            super.onScanResult(callbackType, result)
-            BLERepository.addDevice(result.device, context)
-            Log.d(TAG, "Device scanned : ${result.device}")
-        }
-    }
-
-    /**
-     * As per android docs :
-     * If you declare any dangerous permissions, and if your app is installed on a device that runs
-     * Android 6.0 (API level 23) or higher, you must request the dangerous permissions at runtime
-     * by following the steps in this guide.
-     *
-     * We have to ask for perms like this before we can use anything that needs those perms
-     * during runtime. The specific permissions are declared @ BLEConstant.PERMISSIONS
-     */
-    for (perms in BLEConstant.PERMISSIONS) {
-        if (ContextCompat.checkSelfPermission(context, perms) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(context.getActivity() as Activity, arrayOf(perms), BLEConstant.PERMISSION_CODE)
-        }
-    }
+    val scope = rememberCoroutineScope()
+    val drawerState = androidx.compose.material3.rememberDrawerState(DrawerValue.Closed)
+    val navScanController: NavHostController = rememberAnimatedNavController()
 
     /**
      * Simple scaffold to display button and data
      */
     Scaffold(
-        backgroundColor = MaterialTheme.colors.background
+        backgroundColor = MaterialTheme.colors.background,
+        topBar = { BLEAppBar(scope, drawerState) },
+        bottomBar = { BottomNavigationBar(navScanController) }
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Button(
-                onClick = {
-                    BLERepository.clearDeviceList()
-                    scanning = scanLeDevice(context, scanning, leScanCallback, handler, bluetoothLeScanner)
-                }
-            ) {
-                Text(text = "Scan")
+        ScanNavigation(navScanController)
+    }
+}
+
+//TODO SPLIT HOME SCREEN & SCANNING
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+internal fun BLEAppBar(scope: CoroutineScope, drawerState: DrawerState) {
+    SmallTopAppBar(
+        title = { AppTitle() },
+        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = colorResource(id = R.color.light_grey)),
+        navigationIcon = {
+            /*
+            IconButton(onClick = { scope.launch { drawerState.open() } }) {
+                Icon(
+                    imageVector = Icons.Filled.Menu,
+                    contentDescription = "Open drawer",
+                    tint = MaterialTheme.colorScheme.onBackground
+                )
             }
-            Text(
-                text = "Available Devices",
-                modifier = Modifier.padding(all = 16.dp)
-            )
-            LazyColumn {
-                items(BLERepository.getDeviceList()) { device ->
-                    Button(
-                        onClick = {
-                            bluetoothLeScanner.stopScan(leScanCallback)
-                            navController.navigate(Screen.DeviceScreen.route + "/${device.address}")
-                        },
-                        modifier = Modifier.padding(all = 16.dp)
-                    ) {
-                        Column {
-                            if (device.name != null)
-                                Text(text = "Name: ${device.name}")
-                            if (device.address != null)
-                                Text(text = "Address: ${device.address}")
+            */
+        },
+        actions = { },
+    )
+}
+
+@Composable
+internal fun AppTitle() {
+    androidx.compose.material3.Text(
+        text = stringResource(R.string.app_name),
+        style = androidx.compose.material3.MaterialTheme.typography.headlineSmall,
+        fontStyle = FontStyle.Italic,
+        color = colorResource(id = R.color.white),
+        textAlign = TextAlign.Center,
+        modifier = Modifier.fillMaxWidth()
+    )
+}
+
+
+@Composable
+fun BottomNavigationBar(navController: NavController) {
+    val items = listOf(
+        NavigationItem.Home,
+        NavigationItem.Profile
+    )
+    BottomNavigation(
+        backgroundColor = MaterialTheme.colors.background,
+        contentColor = Color.White
+    ) {
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val currentRoute = navBackStackEntry?.destination?.route
+        items.forEach { item ->
+            BottomNavigationItem(
+                icon = { Icon(painterResource(id = item.icon), contentDescription = item.title) },
+                label = { Text(text = item.title) },
+                selectedContentColor = Color.White,
+                unselectedContentColor = Color.White.copy(0.4f),
+                alwaysShowLabel = true,
+                selected = currentRoute == item.route,
+                onClick = {
+                    navController.navigate(item.route) {
+                        // Pop up to the start destination of the graph to
+                        // avoid building up a large stack of destinations
+                        // on the back stack as users select items
+                        navController.graph.startDestinationRoute?.let { route ->
+                            popUpTo(route) {
+                                saveState = true
+                            }
                         }
+                        // Avoid multiple copies of the same destination when
+                        // reselecting the same item
+                        launchSingleTop = true
+                        // Restore state when reselecting a previously selected item
+                        restoreState = true
                     }
                 }
-            }
+            )
         }
     }
 }
+
 
 
 /**
@@ -141,42 +136,4 @@ fun Context.getActivity(): ComponentActivity? = when (this) {
     is ComponentActivity -> this
     is ContextWrapper -> baseContext.getActivity()
     else -> null
-}
-
-
-/**
- * Simply scans for BLE devices nearby.
- *
- * @param context: The context for perms
- * @param scanning: Check if device is scanning already
- * @param leScanCallback: Callback object to give results
- * @param handler: Lets us stop scanning after period of time
- * @param bluetoothLeScanner: Scanner object
- */
-fun scanLeDevice(
-    context: Context,
-    scanning: Boolean,
-    leScanCallback: ScanCallback,
-    handler: Handler,
-    bluetoothLeScanner: BluetoothLeScanner
-): Boolean {
-    for (perms in BLEConstant.PERMISSIONS) {
-        if (ContextCompat.checkSelfPermission(context, perms) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(context.getActivity() as Activity, arrayOf(perms), BLEConstant.PERMISSION_CODE)
-        }
-    }
-    return if (!scanning) {
-        Log.d(TAG, "Scanning")
-        handler.postDelayed({
-            Log.d(TAG, "Stop Scanning")
-            if (!scanning)
-                bluetoothLeScanner.stopScan(leScanCallback)
-        }, BLEConstant.SCAN_PERIOD)
-        bluetoothLeScanner.startScan(leScanCallback)
-        true
-    } else {
-        Log.d(TAG, "Stop Scanning")
-        bluetoothLeScanner.stopScan(leScanCallback)
-        false
-    }
 }

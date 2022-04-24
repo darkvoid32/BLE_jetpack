@@ -4,12 +4,20 @@
         "source": "D:\\Coding\\Work\\BLE\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher_round.webp"
     },
     {
-        "merged": "D:\\Coding\\Work\\BLE\\app\\build\\intermediates\\merged_res\\debug\\mipmap-hdpi_ic_launcher.webp.flat",
-        "source": "D:\\Coding\\Work\\BLE\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher.webp"
-    },
-    {
         "merged": "D:\\Coding\\Work\\BLE\\app\\build\\intermediates\\merged_res\\debug\\mipmap-xxxhdpi_ic_launcher.webp.flat",
         "source": "D:\\Coding\\Work\\BLE\\app\\src\\main\\res\\mipmap-xxxhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "D:\\Coding\\Work\\BLE\\app\\build\\intermediates\\merged_res\\debug\\drawable-xxhdpi_ic_profile.png.flat",
+        "source": "D:\\Coding\\Work\\BLE\\app\\src\\main\\res\\drawable-xxhdpi\\ic_profile.png"
+    },
+    {
+        "merged": "D:\\Coding\\Work\\BLE\\app\\build\\intermediates\\merged_res\\debug\\drawable-anydpi_ic_profile.xml.flat",
+        "source": "D:\\Coding\\Work\\BLE\\app\\src\\main\\res\\drawable-anydpi\\ic_profile.xml"
+    },
+    {
+        "merged": "D:\\Coding\\Work\\BLE\\app\\build\\intermediates\\merged_res\\debug\\drawable-hdpi_ic_profile.png.flat",
+        "source": "D:\\Coding\\Work\\BLE\\app\\src\\main\\res\\drawable-hdpi\\ic_profile.png"
     },
     {
         "merged": "D:\\Coding\\Work\\BLE\\app\\build\\intermediates\\merged_res\\debug\\drawable-v24_ic_launcher_foreground.xml.flat",
@@ -20,24 +28,8 @@
         "source": "D:\\Coding\\Work\\BLE\\app\\src\\main\\res\\mipmap-xhdpi\\ic_launcher.webp"
     },
     {
-        "merged": "D:\\Coding\\Work\\BLE\\app\\build\\intermediates\\merged_res\\debug\\mipmap-anydpi-v26_ic_launcher_round.xml.flat",
-        "source": "D:\\Coding\\Work\\BLE\\app\\src\\main\\res\\mipmap-anydpi-v26\\ic_launcher_round.xml"
-    },
-    {
-        "merged": "D:\\Coding\\Work\\BLE\\app\\build\\intermediates\\merged_res\\debug\\mipmap-xxhdpi_ic_launcher.webp.flat",
-        "source": "D:\\Coding\\Work\\BLE\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher.webp"
-    },
-    {
-        "merged": "D:\\Coding\\Work\\BLE\\app\\build\\intermediates\\merged_res\\debug\\mipmap-xhdpi_ic_launcher_round.webp.flat",
-        "source": "D:\\Coding\\Work\\BLE\\app\\src\\main\\res\\mipmap-xhdpi\\ic_launcher_round.webp"
-    },
-    {
         "merged": "D:\\Coding\\Work\\BLE\\app\\build\\intermediates\\merged_res\\debug\\mipmap-anydpi-v26_ic_launcher.xml.flat",
         "source": "D:\\Coding\\Work\\BLE\\app\\src\\main\\res\\mipmap-anydpi-v26\\ic_launcher.xml"
-    },
-    {
-        "merged": "D:\\Coding\\Work\\BLE\\app\\build\\intermediates\\merged_res\\debug\\drawable_ic_launcher_background.xml.flat",
-        "source": "D:\\Coding\\Work\\BLE\\app\\src\\main\\res\\drawable\\ic_launcher_background.xml"
     },
     {
         "merged": "D:\\Coding\\Work\\BLE\\app\\build\\intermediates\\merged_res\\debug\\mipmap-xxhdpi_ic_launcher_round.webp.flat",
@@ -48,11 +40,59 @@
         "source": "D:\\Coding\\Work\\BLE\\app\\src\\main\\res\\mipmap-xxxhdpi\\ic_launcher_round.webp"
     },
     {
+        "merged": "D:\\Coding\\Work\\BLE\\app\\build\\intermediates\\merged_res\\debug\\mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "D:\\Coding\\Work\\BLE\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "D:\\Coding\\Work\\BLE\\app\\build\\intermediates\\merged_res\\debug\\mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "D:\\Coding\\Work\\BLE\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "D:\\Coding\\Work\\BLE\\app\\build\\intermediates\\merged_res\\debug\\drawable-xxhdpi_ic_home.png.flat",
+        "source": "D:\\Coding\\Work\\BLE\\app\\src\\main\\res\\drawable-xxhdpi\\ic_home.png"
+    },
+    {
+        "merged": "D:\\Coding\\Work\\BLE\\app\\build\\intermediates\\merged_res\\debug\\drawable-xhdpi_ic_profile.png.flat",
+        "source": "D:\\Coding\\Work\\BLE\\app\\src\\main\\res\\drawable-xhdpi\\ic_profile.png"
+    },
+    {
+        "merged": "D:\\Coding\\Work\\BLE\\app\\build\\intermediates\\merged_res\\debug\\drawable-xhdpi_ic_home.png.flat",
+        "source": "D:\\Coding\\Work\\BLE\\app\\src\\main\\res\\drawable-xhdpi\\ic_home.png"
+    },
+    {
+        "merged": "D:\\Coding\\Work\\BLE\\app\\build\\intermediates\\merged_res\\debug\\mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "D:\\Coding\\Work\\BLE\\app\\src\\main\\res\\mipmap-anydpi-v26\\ic_launcher_round.xml"
+    },
+    {
+        "merged": "D:\\Coding\\Work\\BLE\\app\\build\\intermediates\\merged_res\\debug\\drawable-mdpi_ic_home.png.flat",
+        "source": "D:\\Coding\\Work\\BLE\\app\\src\\main\\res\\drawable-mdpi\\ic_home.png"
+    },
+    {
+        "merged": "D:\\Coding\\Work\\BLE\\app\\build\\intermediates\\merged_res\\debug\\mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "D:\\Coding\\Work\\BLE\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "D:\\Coding\\Work\\BLE\\app\\build\\intermediates\\merged_res\\debug\\mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "D:\\Coding\\Work\\BLE\\app\\src\\main\\res\\mipmap-xhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "D:\\Coding\\Work\\BLE\\app\\build\\intermediates\\merged_res\\debug\\drawable-hdpi_ic_home.png.flat",
+        "source": "D:\\Coding\\Work\\BLE\\app\\src\\main\\res\\drawable-hdpi\\ic_home.png"
+    },
+    {
+        "merged": "D:\\Coding\\Work\\BLE\\app\\build\\intermediates\\merged_res\\debug\\drawable_ic_launcher_background.xml.flat",
+        "source": "D:\\Coding\\Work\\BLE\\app\\src\\main\\res\\drawable\\ic_launcher_background.xml"
+    },
+    {
+        "merged": "D:\\Coding\\Work\\BLE\\app\\build\\intermediates\\merged_res\\debug\\drawable-anydpi_ic_home.xml.flat",
+        "source": "D:\\Coding\\Work\\BLE\\app\\src\\main\\res\\drawable-anydpi\\ic_home.xml"
+    },
+    {
         "merged": "D:\\Coding\\Work\\BLE\\app\\build\\intermediates\\merged_res\\debug\\mipmap-mdpi_ic_launcher_round.webp.flat",
         "source": "D:\\Coding\\Work\\BLE\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher_round.webp"
     },
     {
-        "merged": "D:\\Coding\\Work\\BLE\\app\\build\\intermediates\\merged_res\\debug\\mipmap-mdpi_ic_launcher.webp.flat",
-        "source": "D:\\Coding\\Work\\BLE\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher.webp"
+        "merged": "D:\\Coding\\Work\\BLE\\app\\build\\intermediates\\merged_res\\debug\\drawable-mdpi_ic_profile.png.flat",
+        "source": "D:\\Coding\\Work\\BLE\\app\\src\\main\\res\\drawable-mdpi\\ic_profile.png"
     }
 ]
