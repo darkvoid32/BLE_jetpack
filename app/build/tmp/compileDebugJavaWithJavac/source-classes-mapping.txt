@@ -1,2 +1,0 @@
-com/dark/ble/BuildConfig.java
- com.dark.ble.BuildConfig
