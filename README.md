@@ -1,3 +1,5 @@
 #BLE
 
-bare bones BLE app with jetpack compose
+Simple android app that scans for BLE devices near by.
+
+Made with Jetpack Compose.

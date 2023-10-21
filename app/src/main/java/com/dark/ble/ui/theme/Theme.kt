@@ -27,16 +27,25 @@ private val LightColorPalette = lightColors(
     */
 )
 
+private val NParkPalette = lightColors(
+    primary = ble_theme_primary,
+    primaryVariant = ble_theme_primary_light,
+    onPrimary = ble_theme_onPrimary,
+    secondary = ble_theme_secondary,
+    background = ble_theme_background,
+)
+
 @Composable
 fun BLETheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable() () -> Unit
 ) {
-    val colors = if (darkTheme) {
-        DarkColorPalette
-    } else {
-        LightColorPalette
-    }
+    //val colors = if (darkTheme) {
+    //    DarkColorPalette
+    //} else {
+    //    LightColorPalette
+    //}
+    val colors = NParkPalette
 
     MaterialTheme(
         colors = colors,
