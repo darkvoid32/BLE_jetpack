@@ -25,15 +25,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import coil.compose.AsyncImage
 import com.dark.ble.R
-import com.dark.ble.screen.Screen
 import com.dark.ble.ui.theme.ble_theme_onPrimary
 import com.dark.ble.ui.theme.ble_theme_primary
 
@@ -49,7 +46,7 @@ fun Modifier.imageCard(launcher: ManagedActivityResultLauncher<String, Uri?>): M
     size(100.dp).clickable { launcher.launch("image/*") }
 )
 
-fun Modifier.petListCard(): Modifier = this.then(
+fun Modifier.deviceCard(): Modifier = this.then(
     fillMaxWidth()
         .clip(RoundedCornerShape(4.dp))
         .padding(16.dp)
@@ -59,7 +56,7 @@ fun Modifier.petListCard(): Modifier = this.then(
 
 @Composable
 fun DeviceCard(address: String, navController: NavHostController) {
-    Card(modifier = Modifier.petListCard()) {
+    Card(modifier = Modifier.deviceCard()) {
         Row(modifier = Modifier.height(intrinsicSize = IntrinsicSize.Max)) {
             // Image Card
             Card(
